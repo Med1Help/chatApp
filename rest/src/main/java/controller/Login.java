@@ -15,14 +15,16 @@ import java.util.List;
 public class Login {
     private String response;
     private String UserName;
+    private String tok;
     private String sessionId;
     private int id;
 
-    public Login(String response, String userName, String sessionId, int id) {
+    public Login(String response, String userName, String tok,String sessionId, int id) {
         this.response = response;
         UserName = userName;
         this.sessionId = sessionId;
         this.id = id;
+        this.tok = tok ;
     }
 
     public void setSessionId(String sessionId) {

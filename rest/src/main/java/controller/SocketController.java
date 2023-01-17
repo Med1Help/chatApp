@@ -20,7 +20,7 @@ public class SocketController {
     }
 
 
-    @SendToUser("/topic/message")
+    @SendToUser(value = "/topic/message")
     public message broadcastMessage(@RequestBody message msg , final Principal principal){
         System.out.println("send : "+msg.toString());
         return new message(msg.getMessage()+" : "+principal.getName(),msg.getUserId());

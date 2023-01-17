@@ -16,9 +16,9 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import java.util.Map;
 
-@Configuration
-@EnableWebSocketMessageBroker
-@EnableScheduling
+//@Configuration
+//@EnableWebSocketMessageBroker
+//@EnableScheduling
 public class SocketConfig implements WebSocketMessageBrokerConfigurer {
     @Autowired
     UserRepo repo;

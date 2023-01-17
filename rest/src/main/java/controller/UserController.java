@@ -3,6 +3,8 @@ package controller;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rest.rest.configuration.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,12 +17,15 @@ import java.util.List;
 
 @EnableAutoConfiguration
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
     @Autowired
     UserRepo repo ;
     @Autowired
     MessageRepo mrepo ;
+
+    private final AuthService service;
     @GetMapping("/io")
     public void test(){
         System.out.println("yes");
@@ -38,15 +43,16 @@ public class UserController {
     @PostMapping("/getU")
     public Login getUser(@RequestBody User myuser){
         System.out.println("incoming request "+myuser.getUserName()+"  "+myuser.getPass());
+        String tok = service.auth(myuser.getUserName(),myuser.getPass());
         try{
-            List<User> users = (List<User>) repo.findByUserNameAndPass(myuser.getUserName(), myuser.getPass());
+            List<User> users = (List<User>) repo.findByUserNameAndPass(myuser.getUserName(), "$2a$10$lYkUVsOmIBZW6NWjqc61heQMddpBNiXrR9DOBzzpf61v5jeJvcZrW");
             if(users.isEmpty()){
                 System.out.println("No user found");
                 return new Login("false","0",0);
             }
                 User user = users.get(0);
-                System.out.println("No user found");
-                return new Login("true",user.getUserName(),user.getSessionId(),user.getId());
+                System.out.println("user found go");
+                return new Login("true",user.getUserName(),tok,user.getSessionId(),user.getId());
         }catch(Exception e){
             return new Login("false","0",0);
         }

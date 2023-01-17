@@ -26,8 +26,8 @@ public class WebsocketAuthenticator {
         if (password == null || password.trim().isEmpty()) {
             throw new AuthenticationCredentialsNotFoundException("Password was null or empty.");
         }
-        List<User> users = (List<User>) repo.findByUserNameAndPass(username,password);
-        System.out.println(users);
+        List<User> users = (List<User>) repo.findByUserNameAndPass(username,"$2a$10$lYkUVsOmIBZW6NWjqc61heQMddpBNiXrR9DOBzzpf61v5jeJvcZrW");
+        System.out.println("User from Authenticatopr : "+users);
         if(users.isEmpty()){
             throw new BadCredentialsException("Bad credentials for user " + username);
         }
@@ -36,7 +36,7 @@ public class WebsocketAuthenticator {
 
         // null credentials, we do not pass the password along
         return new UsernamePasswordAuthenticationToken(
-                username,
+                user.getSessionId(),
                 null,
                 Collections.singleton((GrantedAuthority) () -> "USER") // MUST provide at least one role
         );

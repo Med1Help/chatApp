@@ -71,4 +71,12 @@ public class Login {
     public Login(String response) {
         this.response = response;
     }
+
+    public String getTok() {
+        return tok;
+    }
+
+    public void setTok(String tok) {
+        this.tok = tok;
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,10 +31,13 @@ public class SecurityConfig {
                             auth.requestMatchers("/api/getU").permitAll();
                             auth.requestMatchers("/api/send").permitAll();
                             auth.requestMatchers("/api/getMessage/").permitAll();
-                            auth.anyRequest().permitAll();///ws-message
+                            auth.anyRequest().authenticated();///ws-message
                         }
 
                 )
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

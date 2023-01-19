@@ -34,6 +34,7 @@ public class jwtAuthFilter extends OncePerRequestFilter {
         final String authHeader = req.getHeader("Authorization");
         final String jwt;
         final String userEmail;
+        System.out.println("Auth filter  !!!");
         if( authHeader == null || !authHeader.startsWith("Bearer ") ){
             System.out.println("No header authorization found !!!");
             filterChain.doFilter(req,res);
@@ -41,10 +42,12 @@ public class jwtAuthFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserName(jwt);
+        System.out.println("Auth filter  UserName :  "+userEmail);
         if( userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null ){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            System.out.println(userDetails);
+            System.out.println("user auth filter : "+userDetails);
             if(jwtService.isTokenValid(jwt,userDetails)){
+                System.out.println("Auth filter token is valid !!!");
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -55,6 +58,7 @@ public class jwtAuthFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+            System.out.println("Auth filter end !!!");
             filterChain.doFilter(req,res);
         }
     }

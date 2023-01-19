@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login_app/Objects/user.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Requests/RestApi.dart';
 
 class Login_Screen extends StatefulWidget{
@@ -11,11 +11,11 @@ class Login_Screen extends StatefulWidget{
     }
 }
 class Login_Screen_state extends State<Login_Screen>{
-    String color1 = "#2A280C";
-    String color2 = "#938A16";
-    String color3 = "#CFA300";
-    String buttonColorP = "#C97100";
-    String buttonColorop = "#FFB351";
+    String color1 = "#A639E5";
+    String color2 = "#7605B9";
+    String color3 = "#350650";
+    String buttonColorP = "#787779";
+    String buttonColorop = "#787779";
     String textColor ="#FFFFFF";
     late TextEditingController emailC = new TextEditingController(),passC = new TextEditingController();
     GlobalKey<FormState> _loginForm = new GlobalKey<FormState>();
@@ -28,14 +28,11 @@ class Login_Screen_state extends State<Login_Screen>{
 
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: stringToColor(color3),
-        title: Text("Welcome to the login space"),
-      ),
+    
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-          gradient: LinearGradient(begin:Alignment.bottomCenter,end:Alignment.topCenter ,colors: [stringToColor(color3),stringToColor(color3),stringToColor(color3)]),
+          gradient: LinearGradient(begin:Alignment.bottomCenter,end:Alignment.topCenter ,colors: [stringToColor(color3),stringToColor(color2),stringToColor(color1)]),
         ),
         child: ListView(
           //mainAxisAlignment: MainAxisAlignment.center,
@@ -67,6 +64,8 @@ class Login_Screen_state extends State<Login_Screen>{
                           var res = await RestApi.login(emailC.text,passC.text);
                           print("this is the : "+res.toString());
                           try{if(res["response"] == "true") {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.setString("tok",res["tok"]);
                             try{user = new User( res["userName"] , res["id"] );}catch(e){print(e.toString());}
                           Navigator.of(context).pushNamed("Welcome");
                             }}catch(e){print(e.toString());}

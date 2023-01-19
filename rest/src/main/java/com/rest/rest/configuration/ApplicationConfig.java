@@ -21,7 +21,7 @@ public class ApplicationConfig {
     private final UserRepo rep;
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> (UserDetails) rep.findByUserName(username);
+        return username -> (UserDetails) rep.findByUserName(username).get(0);
     }
     /*@Bean
     public AuthenticationProvider authenticationProvider(){

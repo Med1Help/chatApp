@@ -73,13 +73,7 @@ public  class User implements UserDetails {
         this.pass = pass;
     }
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public String getPass() {
-        return pass;
-    }
 
     public User(int id, String userName, String pass) {
         this.id = id;
@@ -94,12 +88,12 @@ public  class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return this.pass;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.userName;
     }
 
     @Override

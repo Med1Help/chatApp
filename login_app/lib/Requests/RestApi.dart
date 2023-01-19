@@ -1,6 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 class RestApi {
+  static Future<dynamic> getContact(String tok)async{
+    print("to get all contact ...2");
+    var res = await http.post(Uri.parse("http://192.168.1.116:8081/api/all"),headers: {'Content-type': 'application/json' , 'Authorization':"Bearer "+tok});
+    print("status Code : "+res.statusCode.toString());
+    print("Resp : "+res.body.toString());
+    List<dynamic> contacts = jsonDecode(res.body.toString());
+    return contacts;
+  }
   static Future<dynamic> login(String username,String pass)async{
       print("bool login");
       // var res =  await http.post( Uri.parse("http://localhost:8081/api/getU"),headers: {'Content-type': 'application/json'},body:jsonEncode({"userName":username,"pass":pass}));

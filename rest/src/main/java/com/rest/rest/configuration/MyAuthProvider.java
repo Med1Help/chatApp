@@ -32,13 +32,13 @@ public class MyAuthProvider implements AuthenticationProvider {
         System.out.println("User Details from UserService based on username-" + providedUsername + " : " + user);
 
         String providedPassword = authentication.getCredentials().toString();
-        String correctPassword = user.getPass();
+        String correctPassword = user.getPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         System.out.println("Provided Password - " + providedPassword + " Correct Password: " + correctPassword);
 
         // Authenticate
         // If Passwords don't match throw and exception
-        if(!encoder.matches(providedPassword, user.getPass())) throw new RuntimeException("Incorrect Credentials");
+        if(!encoder.matches(providedPassword, user.getPassword())) throw new RuntimeException("Incorrect Credentials");
 
         System.out.println("Passwords Match....\n");
 

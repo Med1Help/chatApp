@@ -9,7 +9,9 @@ import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,25 +36,32 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody User myuser){
         System.out.println(myuser.toString());
         try{
-            User returnedUser = (User) repo.save(new User(myuser.getUserName(), myuser.getPass()));
+            User returnedUser = (User) repo.save(new User(myuser.getUsername(), myuser.getPassword()));
             return new ResponseEntity<>(returnedUser, HttpStatus.CREATED);
         }catch(Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PostMapping("/all")
+    public List<User>getAll(){
+        System.out.println("Should retrun the list of contacts");
+        List<User> tResponseEntity;
+        tResponseEntity = repo.findAll();
+        return tResponseEntity;
+    }
     @PostMapping("/getU")
     public Login getUser(@RequestBody User myuser){
-        System.out.println("incoming request "+myuser.getUserName()+"  "+myuser.getPass());
-        String tok = service.auth(myuser.getUserName(),myuser.getPass());
+        System.out.println("incoming request "+myuser.getUsername()+"  "+myuser.getPassword());
+        String tok = service.auth(myuser.getUsername(),myuser.getPassword());
         try{
-            List<User> users = (List<User>) repo.findByUserNameAndPass(myuser.getUserName(), "$2a$10$lYkUVsOmIBZW6NWjqc61heQMddpBNiXrR9DOBzzpf61v5jeJvcZrW");
+            List<User> users = (List<User>) repo.findByUserName(myuser.getUsername());
             if(users.isEmpty()){
                 System.out.println("No user found");
                 return new Login("false","0",0);
             }
                 User user = users.get(0);
-                System.out.println("user found go");
-                return new Login("true",user.getUserName(),tok,user.getSessionId(),user.getId());
+                System.out.println("user found go "+tok);
+                return new Login("true",user.getUsername(),tok,user.getSessionId(),user.getId());
         }catch(Exception e){
             return new Login("false","0",0);
         }

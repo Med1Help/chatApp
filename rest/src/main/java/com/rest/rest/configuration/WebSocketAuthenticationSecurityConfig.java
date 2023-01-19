@@ -62,7 +62,7 @@ public class WebSocketAuthenticationSecurityConfig implements WebSocketMessageBr
 
                     final UsernamePasswordAuthenticationToken user;
                     try {
-                        user = websocketAuthenticator.getAuthenticatedOrFail(username, "1234567");
+                        user = websocketAuthenticator.getAuthenticatedOrFail(username, password);
                         System.out.print("User : "+user);
                     } catch (AuthenticationException e) {
                         throw new RuntimeException(e);
